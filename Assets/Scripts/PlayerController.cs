@@ -5,45 +5,100 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody Rigidbody;
+    private bool[] PossibleMoveDirections = { true, true, true, true };  //up, right, down, left
+    private int CurrnetMoveDirection;
+    private Vector3 velocity;
 
     public float Speed = 10f;
 
-    // Start is called before the first frame update
     void Start()
     {
-        Rigidbody = GetComponent<Rigidbody>();    
+        Rigidbody = GetComponent<Rigidbody>();
+        CheckNearbyWalls();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if(Rigidbody.velocity.magnitude > 0)
+        {
+            AddVelocity();
+            return;
+        }
+
         float verticalInputValue = Input.GetAxis("Vertical");
         float horizontalInputValue = Input.GetAxis("Horizontal");
         if (verticalInputValue != 0)
         {
-            Vector3 velocity = transform.forward * Speed;
+            velocity = transform.forward * Speed;
+            CurrnetMoveDirection = 0;
             if (verticalInputValue < 0)
             {
                 velocity *= -1;
+                CurrnetMoveDirection = 2;
             }
-            Rigidbody.velocity = velocity;
+            AddVelocity();
         }
-        else if ( horizontalInputValue != 0)
+        else if (horizontalInputValue != 0)
         {
-            Vector3 velocity = transform.right * Speed;
+            velocity = transform.right * Speed;
+            CurrnetMoveDirection = 1;
             if (horizontalInputValue < 0)
             {
                 velocity *= -1;
+                CurrnetMoveDirection = 3;
             }
+            AddVelocity();
+        }
+    }
+
+    private void AddVelocity()
+    {
+        if (PossibleMoveDirections[CurrnetMoveDirection])
+        {
             Rigidbody.velocity = velocity;
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.tag == "Wall")
+        if (collision.collider.tag == "Wall")
         {
-            //
+            Rigidbody.velocity = Vector3.zero;
+            Vector3 playerPosition = new Vector3(Mathf.RoundToInt(transform.position.x), transform.position.y, Mathf.RoundToInt(transform.position.z));
+            transform.position = playerPosition;
+
+            for (int i = 0; i < PossibleMoveDirections.Length; i++)
+            {
+                PossibleMoveDirections[i] = true;
+            }
+            CheckNearbyWalls();
+        }
+    } 
+    
+    private void CheckNearbyWalls()
+    {
+        Collider[] gameObjects = Physics.OverlapSphere(transform.position, 0.5f);
+        foreach (Collider nearByGameObject in gameObjects)
+        {
+            if (nearByGameObject.tag == "Wall")
+            {
+                if (nearByGameObject.transform.position.z - transform.position.z > 1)
+                {
+                    PossibleMoveDirections[0] = false;
+                }
+                else if (nearByGameObject.transform.position.x - transform.position.x > 1)
+                {
+                    PossibleMoveDirections[1] = false;
+                }
+                else if (nearByGameObject.transform.position.z - transform.position.z < -1)
+                {
+                    PossibleMoveDirections[2] = false;
+                }
+                else if (nearByGameObject.transform.position.x - transform.position.x < -1)
+                {
+                    PossibleMoveDirections[3] = false;
+                }
+            }
         }
     }
 }
