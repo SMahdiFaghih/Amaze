@@ -71,19 +71,19 @@ public class PlayerController : MonoBehaviour
         {
             if (nearByGameObject.tag == "Wall")
             {
-                if (nearByGameObject.transform.position.z - transform.position.z > 1)
+                if (nearByGameObject.transform.position.z - transform.position.z == 1)
                 {
                     PossibleMoveDirections[0] = false;
                 }
-                else if (nearByGameObject.transform.position.x - transform.position.x > 1)
+                else if (nearByGameObject.transform.position.x - transform.position.x == 1)
                 {
                     PossibleMoveDirections[1] = false;
                 }
-                else if (nearByGameObject.transform.position.z - transform.position.z < -1)
+                else if (nearByGameObject.transform.position.z - transform.position.z == -1)
                 {
                     PossibleMoveDirections[2] = false;
                 }
-                else if (nearByGameObject.transform.position.x - transform.position.x < -1)
+                else if (nearByGameObject.transform.position.x - transform.position.x == -1)
                 {
                     PossibleMoveDirections[3] = false;
                 }
