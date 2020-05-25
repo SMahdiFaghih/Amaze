@@ -58,25 +58,14 @@ public class PlayerController : MonoBehaviour
             Rigidbody.velocity = velocity;
         }
     }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.tag == "Wall")
-        {
-            Rigidbody.velocity = Vector3.zero;
-            Vector3 playerPosition = new Vector3(Mathf.RoundToInt(transform.position.x), transform.position.y, Mathf.RoundToInt(transform.position.z));
-            transform.position = playerPosition;
-
-            for (int i = 0; i < PossibleMoveDirections.Length; i++)
-            {
-                PossibleMoveDirections[i] = true;
-            }
-            CheckNearbyWalls();
-        }
-    } 
     
-    private void CheckNearbyWalls()
+    public void CheckNearbyWalls()
     {
+        for (int i = 0; i < PossibleMoveDirections.Length; i++)
+        {
+            PossibleMoveDirections[i] = true;
+        }
+
         Collider[] gameObjects = Physics.OverlapSphere(transform.position, 0.5f);
         foreach (Collider nearByGameObject in gameObjects)
         {
