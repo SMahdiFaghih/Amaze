@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     {
         Text Level = FindObjectOfType<Text>();
         Level.text = SceneManager.GetActiveScene().name;
+        print("Current Level is: " + Level.text);
     }
 
     void Start()
