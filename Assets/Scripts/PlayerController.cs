@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     private int MoveDirection;
     private Vector3 velocity;
 
-
     public float Speed = 10f;
 
     void Start()

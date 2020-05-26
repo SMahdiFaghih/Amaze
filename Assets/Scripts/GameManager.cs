@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     private Rigidbody Rigidbody;
     private PlayerController PlayerController;
-    private ParticlesController ParticlesController;
+    private ParticlesController[] ParticlesController;
     private ColorManager ColorManager;
     private int FloorCubesNum;
 
@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         Rigidbody = GetComponent<Rigidbody>();
         PlayerController = GetComponent<PlayerController>();
-        ParticlesController = GetComponentInChildren<ParticlesController>();
+        ParticlesController = GetComponentsInChildren<ParticlesController>();
         ColorManager = GetComponent<ColorManager>();
         FloorCubesNum = GameObject.FindGameObjectsWithTag("Floor").Length;
     }
@@ -38,7 +38,8 @@ public class GameManager : MonoBehaviour
 
             PlayerController.CheckNearbyWalls();
 
-            ParticlesController.PlayParticle();
+            ParticlesController[1].StopParticle();
+            ParticlesController[0].PlayParticle();
         }
         else if (collision.collider.tag == "Floor")
         {
@@ -47,12 +48,17 @@ public class GameManager : MonoBehaviour
             FloorCubesNum --;
             if (FloorCubesNum == 0)
             {
-                GotoNextLevel();
+                LoadNextLevel();
             }
+        }
+        if (Rigidbody.velocity.magnitude != 0)
+        {
+            ParticlesController[1].SetMoveParticleRotation(Rigidbody.velocity);
+            ParticlesController[1].PlayParticle();
         }
     }
 
-    private void GotoNextLevel()
+    private void LoadNextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
