@@ -6,8 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody Rigidbody;
     private bool[] PossibleMoveDirections = { true, true, true, true };  //up, right, down, left
-    private int CurrnetMoveDirection;
+    private int MoveDirection;
     private Vector3 velocity;
+
 
     public float Speed = 10f;
 
@@ -30,22 +31,22 @@ public class PlayerController : MonoBehaviour
         if (verticalInputValue != 0)
         {
             velocity = transform.forward * Speed;
-            CurrnetMoveDirection = 0;
+            MoveDirection = 0;
             if (verticalInputValue < 0)
             {
                 velocity *= -1;
-                CurrnetMoveDirection = 2;
+                MoveDirection = 2;
             }
             AddVelocity();
         }
         else if (horizontalInputValue != 0)
         {
             velocity = transform.right * Speed;
-            CurrnetMoveDirection = 1;
+            MoveDirection = 1;
             if (horizontalInputValue < 0)
             {
                 velocity *= -1;
-                CurrnetMoveDirection = 3;
+                MoveDirection = 3;
             }
             AddVelocity();
         }
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void AddVelocity()
     {
-        if (PossibleMoveDirections[CurrnetMoveDirection])
+        if (PossibleMoveDirections[MoveDirection])
         {
             Rigidbody.velocity = velocity;
         }

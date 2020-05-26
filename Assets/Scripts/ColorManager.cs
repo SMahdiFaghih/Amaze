@@ -8,7 +8,7 @@ public class ColorManager : MonoBehaviour
     private Material[] CubeMaterials;
     private int SelectedMaterialNumber;
 
-    void Start()
+    void Awake()
     {
         SphereMaterials = Resources.LoadAll<Material>("Sphere Materials/");
         CubeMaterials = Resources.LoadAll<Material>("Cube Colors/MAterials/");

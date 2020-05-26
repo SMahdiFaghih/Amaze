@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     private Rigidbody Rigidbody;
     private PlayerController PlayerController;
+    private ParticlesController ParticlesController;
     private ColorManager ColorManager;
     private int FloorCubesNum;
 
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         Rigidbody = GetComponent<Rigidbody>();
         PlayerController = GetComponent<PlayerController>();
+        ParticlesController = GetComponentInChildren<ParticlesController>();
         ColorManager = GetComponent<ColorManager>();
         FloorCubesNum = GameObject.FindGameObjectsWithTag("Floor").Length;
     }
@@ -35,6 +37,8 @@ public class GameManager : MonoBehaviour
             transform.position = playerPosition;
 
             PlayerController.CheckNearbyWalls();
+
+            ParticlesController.PlayParticle();
         }
         else if (collision.collider.tag == "Floor")
         {
