@@ -10,7 +10,11 @@ public class GameManager : MonoBehaviour
     private PlayerController PlayerController;
     private ParticlesController[] ParticlesController;
     private ColorManager ColorManager;
+    private GameObject[] FloorCubes;
     private int FloorCubesNum;
+    private bool LevelCompleted = false;
+
+    public Text PressToNextLevel;
 
     void Awake()
     {
@@ -25,7 +29,19 @@ public class GameManager : MonoBehaviour
         PlayerController = GetComponent<PlayerController>();
         ParticlesController = GetComponentsInChildren<ParticlesController>();
         ColorManager = GetComponent<ColorManager>();
-        FloorCubesNum = GameObject.FindGameObjectsWithTag("Floor").Length;
+        FloorCubes = GameObject.FindGameObjectsWithTag("Floor");
+        FloorCubesNum = FloorCubes.Length;
+    }
+
+    void Update()
+    {
+        if (LevelCompleted)
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                LoadNextLevel();
+            }
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -48,7 +64,9 @@ public class GameManager : MonoBehaviour
             FloorCubesNum --;
             if (FloorCubesNum == 0)
             {
-                LoadNextLevel();
+                PressToNextLevel.gameObject.SetActive(true);
+                LevelCompleted = true;
+                PlayerController.enabled = false;
             }
         }
         if (Rigidbody.velocity.magnitude != 0)
