@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,8 +13,12 @@ public class GameManager : MonoBehaviour
     private ParticleSystem VictoryParticle;
     private ColorManager ColorManager;
     private GameObject[] FloorCubes;
-    private int FloorCubesNum;
+    private int NoncoloredFloorCubesNum;
     private bool LevelCompleted = false;
+
+    private readonly float CubeRotationDelay = 0.25f;
+    private readonly float CubeRotatingExecutaionDelay = 2f;
+    private readonly float CubeRotationFactor = 2f;
 
     public Text PressToNextLevel;
 
@@ -32,8 +37,8 @@ public class GameManager : MonoBehaviour
         VictoryParticle = FindObjectOfType<ParticleSystem>();
         ColorManager = GetComponent<ColorManager>();
         FloorCubes = GameObject.FindGameObjectsWithTag("Floor");
-        FloorCubesNum = FloorCubes.Length;
-                SetVictoryParticlePosition();
+        NoncoloredFloorCubesNum = FloorCubes.Length;
+        SetVictoryParticlePosition();
     }
 
     void Update()
@@ -59,24 +64,69 @@ public class GameManager : MonoBehaviour
 
             ParticlesController[1].StopParticle();
             ParticlesController[0].PlayParticle();
+
+            if (NoncoloredFloorCubesNum == 0)
+            {
+                ExecuteAfterLevelCompleteInstructions();
+            }
         }
         else if (collision.collider.tag == "Floor")
         {
             ColorManager.ChangeFloorColor(collision.collider.gameObject);
             collision.collider.tag = "ColoredBefore";
-            FloorCubesNum --;
-            if (FloorCubesNum == 0)
-            {
-                PressToNextLevel.gameObject.SetActive(true);
-                VictoryParticle.Play();
-                LevelCompleted = true;
-                PlayerController.enabled = false;
-            }
+            NoncoloredFloorCubesNum --;
         }
         if (Rigidbody.velocity.magnitude != 0)
         {
             ParticlesController[1].SetMoveParticleRotation(Rigidbody.velocity);
             ParticlesController[1].PlayParticle();
+        }
+    }
+
+    private void ExecuteAfterLevelCompleteInstructions()
+    {
+        PlayerController.enabled = false;
+        Rigidbody.isKinematic = true;
+        GetComponent<SphereCollider>().isTrigger = true;
+        PressToNextLevel.gameObject.SetActive(true);
+        VictoryParticle.Play();
+        SortFloorCubes();
+        StartCoroutine(RotateFloorCubes());
+        LevelCompleted = true;
+    }
+
+    private void SortFloorCubes()
+    {
+        FloorCubes = FloorCubes.OrderBy(FloorCubes => FloorCubes.transform.position.x).ToArray();
+    }
+
+    private IEnumerator RotateFloorCubes()
+    {
+        while (true)
+        {
+            for (int i=0;i < FloorCubes.Length;i++)
+            {
+                GameObject floor = FloorCubes[i];
+                StartCoroutine(RotateOneFloorCube(floor));
+                if (i == FloorCubes.Length - 1 || floor.transform.position.x != FloorCubes[i+1].transform.position.x)
+                {
+                    yield return new WaitForSeconds(CubeRotationDelay);
+                }
+            }
+            yield return new WaitForSeconds(CubeRotatingExecutaionDelay);
+        }
+    }
+
+    private IEnumerator RotateOneFloorCube(GameObject floor)
+    {
+        Vector3 currentRotation = floor.transform.eulerAngles;
+        Vector3 newRotation = currentRotation + new Vector3(0, 0, 90);
+        float lerpFactor = 0;
+        while (lerpFactor < 1)
+        {
+            floor.transform.eulerAngles = Vector3.Lerp(currentRotation, newRotation, lerpFactor);
+            lerpFactor += Time.deltaTime * CubeRotationFactor;
+            yield return null;
         }
     }
 
