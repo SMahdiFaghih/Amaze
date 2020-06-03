@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private Rigidbody Rigidbody;
     private PlayerController PlayerController;
     private ParticlesController[] ParticlesController;
+    private ParticleSystem VictoryParticle;
     private ColorManager ColorManager;
     private GameObject[] FloorCubes;
     private int FloorCubesNum;
@@ -28,9 +29,11 @@ public class GameManager : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
         PlayerController = GetComponent<PlayerController>();
         ParticlesController = GetComponentsInChildren<ParticlesController>();
+        VictoryParticle = FindObjectOfType<ParticleSystem>();
         ColorManager = GetComponent<ColorManager>();
         FloorCubes = GameObject.FindGameObjectsWithTag("Floor");
         FloorCubesNum = FloorCubes.Length;
+                SetVictoryParticlePosition();
     }
 
     void Update()
@@ -65,6 +68,7 @@ public class GameManager : MonoBehaviour
             if (FloorCubesNum == 0)
             {
                 PressToNextLevel.gameObject.SetActive(true);
+                VictoryParticle.Play();
                 LevelCompleted = true;
                 PlayerController.enabled = false;
             }
@@ -74,6 +78,13 @@ public class GameManager : MonoBehaviour
             ParticlesController[1].SetMoveParticleRotation(Rigidbody.velocity);
             ParticlesController[1].PlayParticle();
         }
+    }
+
+    private void SetVictoryParticlePosition()
+    {
+        float axisY = 2.5f;
+        Vector3 newPosition = new Vector3(PressToNextLevel.transform.position.x, axisY, PressToNextLevel.transform.position.z);
+        VictoryParticle.transform.position = newPosition;
     }
 
     private void LoadNextLevel()
