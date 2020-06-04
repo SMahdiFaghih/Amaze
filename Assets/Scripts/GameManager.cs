@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         Vector3 currentRotation = floor.transform.eulerAngles;
         Vector3 newRotation = currentRotation + new Vector3(0, 0, 90);
         float lerpFactor = 0;
-        while (lerpFactor < 1)
+        while (lerpFactor < 1.2) //so that lerpFactor will definitley reach 1 before quit loop
         {
             floor.transform.eulerAngles = Vector3.Lerp(currentRotation, newRotation, lerpFactor);
             lerpFactor += Time.deltaTime * CubeRotationFactor;
