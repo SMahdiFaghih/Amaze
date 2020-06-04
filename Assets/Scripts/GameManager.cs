@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
         AudioSource = GetComponent<AudioSource>();
         FloorCubes = GameObject.FindGameObjectsWithTag("Floor");
         NoncoloredFloorCubesNum = FloorCubes.Length;
-        SetVictoryParticlePosition();
     }
 
     void Update()
@@ -91,6 +90,7 @@ public class GameManager : MonoBehaviour
         Rigidbody.isKinematic = true;
         GetComponent<SphereCollider>().isTrigger = true;
         PressToNextLevel.gameObject.SetActive(true);
+        SetVictoryParticlePosition();
         VictoryParticle.Play();
         AudioSource.Play();
         SortFloorCubes();
