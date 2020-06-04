@@ -10,7 +10,7 @@ public class SetCameraPosition : MonoBehaviour
     private float CameraYAxis = 15;
     private Quaternion CameraRotation = new Quaternion(85, 0, 0, 0);
 
-    private float MinSize = 20;
+    private float MinSize = 18;
     private float xMax = 0;
     private float xMin = 0;
     private float zMax = 0;
@@ -41,7 +41,7 @@ public class SetCameraPosition : MonoBehaviour
 
     private void SetSize()
     {
-        float properSize = MinSize + Mathf.Max(zMax - zMin + 1, xMax - xMin + 1) - 2;
+        float properSize = MinSize + Mathf.Max((zMax - zMin + 1) * 1.5f, (xMax - xMin + 1) * 1f);
         Camera.fieldOfView = properSize;
     }
 }
