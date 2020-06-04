@@ -41,7 +41,7 @@ public class SetCameraPosition : MonoBehaviour
 
     private void SetSize()
     {
-        float properSize = MinSize + Mathf.Max((zMax - zMin + 1) * 3f, (xMax - xMin + 1) * 2f);
+        float properSize = MinSize + Mathf.Max(zMax - zMin + 1, xMax - xMin + 1) * 2;
         Camera.fieldOfView = properSize;
     }
 }
