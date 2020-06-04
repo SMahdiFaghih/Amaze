@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wall
   - Floor
+  - ColoredBefore
   layers:
   - Default
   - TransparentFX
