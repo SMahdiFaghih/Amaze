@@ -16,7 +16,7 @@ public class LoadOpenningLevel : MonoBehaviour
     {
         if (PlayerPrefs.HasKey("CurrentLevel"))
         {
-            SceneManager.LoadScene(PlayerPrefs.GetInt("CurrnetLevel"));
+            SceneManager.LoadScene(PlayerPrefs.GetInt("CurrentLevel"));
         }
         else
         {

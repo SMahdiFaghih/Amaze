@@ -7,7 +7,8 @@ public class ExitGame : MonoBehaviour
 {
     public void Exit()
     {
-        PlayerPrefs.SetInt("CurrnetLevel", SceneManager.GetActiveScene().buildIndex);
+        PlayerPrefs.SetInt("CurrentLevel", SceneManager.GetActiveScene().buildIndex);
+
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else
