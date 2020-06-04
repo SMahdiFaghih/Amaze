@@ -21,11 +21,12 @@ public class GameManager : MonoBehaviour
     private readonly float CubeRotatingExecutaionDelay = 2f;
     private readonly float CubeRotationFactor = 2f;
 
+    private Text Level;
     public Text PressToNextLevel;
 
     void Awake()
     {
-        Text Level = FindObjectOfType<Text>();
+        Level = FindObjectOfType<Text>();
         Level.text = SceneManager.GetActiveScene().name;
         print("Current Level is: " + Level.text);
     }
@@ -89,6 +90,7 @@ public class GameManager : MonoBehaviour
         PlayerController.enabled = false;
         Rigidbody.isKinematic = true;
         GetComponent<SphereCollider>().isTrigger = true;
+        Level.text = Level.text + " Completed!";
         PressToNextLevel.gameObject.SetActive(true);
         SetVictoryParticlePosition();
         VictoryParticle.Play();
