@@ -35,8 +35,9 @@ public class SetCameraPosition : MonoBehaviour
         }
         CameraPosition.x = (xMax + xMin) / 2;
         CameraPosition.y = CameraYAxis;
-        CameraPosition.z = (zMax + zMin * 1.5f) / 2.5f;
+        CameraPosition.z = zMin;
         transform.position = CameraPosition;
+        transform.LookAt(new Vector3(CameraPosition.x, 0, (zMin + zMax * 2) / 3));
     }
 
     private void SetSize()
