@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private ParticlesController[] ParticlesController;
     private ParticleSystem VictoryParticle;
     private ColorManager ColorManager;
+    private AudioSource AudioSource;
     private GameObject[] FloorCubes;
     private int NoncoloredFloorCubesNum;
     private bool LevelCompleted = false;
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
         ParticlesController = GetComponentsInChildren<ParticlesController>();
         VictoryParticle = FindObjectOfType<ParticleSystem>();
         ColorManager = GetComponent<ColorManager>();
+        AudioSource = GetComponent<AudioSource>();
         FloorCubes = GameObject.FindGameObjectsWithTag("Floor");
         NoncoloredFloorCubesNum = FloorCubes.Length;
         SetVictoryParticlePosition();
@@ -90,6 +92,7 @@ public class GameManager : MonoBehaviour
         GetComponent<SphereCollider>().isTrigger = true;
         PressToNextLevel.gameObject.SetActive(true);
         VictoryParticle.Play();
+        AudioSource.Play();
         SortFloorCubes();
         StartCoroutine(RotateFloorCubes());
         LevelCompleted = true;
